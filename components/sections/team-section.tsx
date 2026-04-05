@@ -16,7 +16,7 @@ export function TeamSection() {
             People building Deafy
           </h2>
           <p className="text-muted-foreground mt-4 text-lg">
-            Building Deafy is a team effort—refresh this lineup as you grow.
+            Building Deafy is a team effort.
           </p>
         </div>
 
