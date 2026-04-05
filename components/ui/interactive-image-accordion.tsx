@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import React, { useState } from "react";
+import { cn } from "@/lib/utils";
 
 export type AccordionImageItem = {
   id: number;
@@ -60,9 +61,10 @@ function AccordionItem({ item, isActive, onActivate }: AccordionItemProps) {
       tabIndex={0}
       aria-expanded={isActive}
       aria-label={item.title}
-      className={`relative h-[min(450px,55vh)] min-h-[200px] shrink-0 cursor-pointer overflow-hidden rounded-2xl transition-all duration-700 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:h-[450px] ${
-        isActive ? "w-[min(100%,400px)] sm:w-[400px]" : "w-[48px] sm:w-[60px]"
-      }`}
+      className={cn(
+        "relative hidden h-[450px] shrink-0 cursor-pointer overflow-hidden rounded-2xl transition-all duration-700 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary md:block",
+        isActive ? "w-[400px]" : "w-[60px]",
+      )}
       onMouseEnter={onActivate}
       onFocus={onActivate}
       onClick={onActivate}
@@ -77,18 +79,19 @@ function AccordionItem({ item, isActive, onActivate }: AccordionItemProps) {
         src={imageSrc}
         alt=""
         fill
-        sizes="(max-width: 640px) 80vw, 400px"
+        sizes="(max-width: 768px) 0px, 400px"
         className="object-cover"
         onError={() => setImageSrc(FALLBACK_IMAGE)}
       />
       <div className="absolute inset-0 bg-black/40" />
 
       <span
-        className={`absolute text-lg font-semibold whitespace-nowrap text-white transition-all duration-300 ease-in-out ${
+        className={cn(
+          "absolute text-lg font-semibold whitespace-nowrap text-white transition-all duration-300 ease-in-out",
           isActive
             ? "bottom-6 left-1/2 -translate-x-1/2 rotate-0"
-            : "bottom-24 left-1/2 w-auto -translate-x-1/2 rotate-90 text-left"
-        }`}
+            : "bottom-24 left-1/2 w-auto -translate-x-1/2 rotate-90 text-left",
+        )}
       >
         {item.title}
       </span>
@@ -98,22 +101,33 @@ function AccordionItem({ item, isActive, onActivate }: AccordionItemProps) {
 
 export function LandingAccordionItem() {
   const [activeIndex, setActiveIndex] = useState(2);
+  const [mobileImageFailed, setMobileImageFailed] = useState(false);
+
+  const activeItem = accordionItems[activeIndex] ?? accordionItems[0];
+  const mobileImageSrc = mobileImageFailed
+    ? FALLBACK_IMAGE
+    : (activeItem?.imageUrl ?? "");
+
+  const setFeatureIndex = (index: number) => {
+    setMobileImageFailed(false);
+    setActiveIndex(index);
+  };
 
   return (
     <div className="bg-background font-sans">
       <section
         id="features"
-        className="container mx-auto scroll-mt-24 px-4 py-12 md:py-24"
+        className="container mx-auto max-w-full scroll-mt-24 px-4 py-12 md:py-24"
       >
-        <div className="flex flex-col items-center justify-between gap-12 md:flex-row">
+        <div className="flex flex-col items-center justify-between gap-10 md:flex-row md:gap-12">
           <div className="w-full text-center md:w-1/2 md:text-left">
             <p className="text-primary mb-3 text-sm font-semibold tracking-wide uppercase">
               What Deafy offers
             </p>
-            <h2 className="text-foreground text-4xl leading-tight font-bold tracking-tighter md:text-5xl">
+            <h2 className="text-foreground text-3xl leading-tight font-bold tracking-tighter sm:text-4xl md:text-5xl">
               Deafy is built for Deaf communicators—at school, work, and home
             </h2>
-            <p className="text-muted-foreground mx-auto mt-6 max-w-xl text-lg md:mx-0">
+            <p className="text-muted-foreground mx-auto mt-6 max-w-xl text-base leading-relaxed sm:text-lg md:mx-0">
               Deafy pairs on-device assistance with clearer day-to-day
               conversations. Join the beta to help improve hand-signing accuracy
               in Deafy, on your terms, with privacy you control.
@@ -128,9 +142,58 @@ export function LandingAccordionItem() {
             </div>
           </div>
 
-          <div className="w-full md:w-1/2">
+          <div className="w-full min-w-0 md:w-1/2">
+            {/* Mobile: one image + scrollable chips (horizontal strip is too wide on small viewports) */}
+            <div className="md:hidden">
+              <div
+                className="border-border bg-muted/30 relative mx-auto aspect-[3/4] w-full max-w-md overflow-hidden rounded-2xl border shadow-sm"
+                role="img"
+                aria-label={activeItem.title}
+              >
+                <Image
+                  key={`${activeIndex}-${mobileImageSrc}`}
+                  src={mobileImageSrc}
+                  alt=""
+                  fill
+                  sizes="(max-width: 768px) 100vw, 0px"
+                  className="object-cover"
+                  priority={activeIndex === 2}
+                  onError={() => setMobileImageFailed(true)}
+                />
+                <div className="pointer-events-none absolute inset-0 bg-black/40" />
+                <p className="pointer-events-none absolute right-4 bottom-4 left-4 text-center text-base font-semibold leading-snug text-balance text-white sm:text-lg">
+                  {activeItem.title}
+                </p>
+              </div>
+
+              <div
+                className="mt-4 flex snap-x snap-mandatory gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                role="tablist"
+                aria-label="Choose a capability"
+              >
+                {accordionItems.map((item, index) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={index === activeIndex}
+                    className={cn(
+                      "snap-center shrink-0 rounded-full border px-3.5 py-2 text-left text-xs font-medium transition sm:text-sm",
+                      index === activeIndex
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-background text-foreground hover:bg-muted/80",
+                    )}
+                    onClick={() => setFeatureIndex(index)}
+                  >
+                    {item.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Desktop / tablet: horizontal accordion */}
             <div
-              className="flex flex-row items-center justify-start gap-2 overflow-x-auto p-2 sm:justify-center sm:gap-4 sm:p-4"
+              className="hidden flex-row items-center justify-center gap-4 overflow-x-auto p-4 md:flex"
               role="list"
               aria-label="Deafy capabilities"
             >
@@ -139,7 +202,7 @@ export function LandingAccordionItem() {
                   <AccordionItem
                     item={item}
                     isActive={index === activeIndex}
-                    onActivate={() => setActiveIndex(index)}
+                    onActivate={() => setFeatureIndex(index)}
                   />
                 </div>
               ))}
