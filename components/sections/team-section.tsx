@@ -16,11 +16,10 @@ export function TeamSection() {
             People building Deafy
           </h2>
           <p className="text-muted-foreground mt-4 text-lg">
-            Replace photos anytime—drop portraits into{" "}
-            <code className="text-foreground text-sm">public/team</code> or
-            update{" "}
-            <code className="text-foreground text-sm">lib/data/team.ts</code>
-            .
+            Building Deafy is a team effort—refresh this lineup as you grow.
+            Drop portraits in{" "}
+            <code className="text-foreground text-sm">public/team</code> or edit{" "}
+            <code className="text-foreground text-sm">lib/data/team.ts</code>.
           </p>
         </div>
 
