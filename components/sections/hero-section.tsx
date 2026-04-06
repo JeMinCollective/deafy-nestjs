@@ -1,15 +1,13 @@
 import Link from "next/link";
 import { Sparkles, Users } from "lucide-react";
+import { BetaDownloadTrigger } from "@/components/beta/beta-download-trigger";
 import {
   HeroMockAppPrimary,
   HeroMockAppSecondary,
 } from "@/components/sections/hero-mock-app-screens";
 import { PhoneShowcase } from "@/components/sections/phone-showcase";
-import { getBetaApkHref } from "@/lib/config/beta-apk";
 
 export function HeroSection() {
-  const apkHref = getBetaApkHref();
-
   return (
     <section id="download" className="relative overflow-hidden scroll-mt-28">
       <div
@@ -38,15 +36,10 @@ export function HeroSection() {
               and shape what comes next.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Link
-                href={apkHref}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring inline-flex items-center justify-center rounded-full px-8 py-3.5 text-base font-semibold shadow-lg transition focus-visible:ring-2 focus-visible:outline-none"
-              >
-                Download Beta APK
-              </Link>
+              <BetaDownloadTrigger variant="hero" />
               <Link
                 href="#features"
-                className="border-border text-foreground hover:bg-muted/80 inline-flex rounded-full border px-6 py-3.5 text-base font-semibold transition"
+                className="border-border text-foreground hover:bg-muted/80 focus-visible:ring-ring inline-flex rounded-full border px-6 py-3.5 text-base font-semibold transition focus-visible:ring-2 focus-visible:outline-none"
               >
                 Explore features
               </Link>

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import React, { useState } from "react";
+import { BetaDownloadTrigger } from "@/components/beta/beta-download-trigger";
 import { cn } from "@/lib/utils";
 
 export type AccordionImageItem = {
@@ -133,12 +134,12 @@ export function LandingAccordionItem() {
               in Deafy, on your terms, with privacy you control.
             </p>
             <div className="mt-8">
-              <a
-                href="#download"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 inline-block rounded-lg px-8 py-3 font-semibold shadow-lg transition-colors duration-300"
+              <BetaDownloadTrigger
+                variant="hero"
+                className="inline-block rounded-lg px-8 py-3 shadow-lg"
               >
                 Join the beta
-              </a>
+              </BetaDownloadTrigger>
             </div>
           </div>
 
