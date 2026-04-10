@@ -25,8 +25,8 @@ export function TeamSection() {
             <div className="bg-muted mx-auto mt-4 h-4 w-80 animate-pulse rounded" />
           </div>
 
-          <div className="mx-auto grid max-w-5xl gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {[...Array(4)].map((_, i) => (
+          <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+            {[...Array(5)].map((_, i) => (
               <div
                 key={i}
                 className="bg-card ring-border/60 rounded-2xl p-6 text-center ring-1 shadow-sm"
