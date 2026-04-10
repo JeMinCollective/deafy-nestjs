@@ -14,7 +14,7 @@ export async function GET() {
     return NextResponse.json(teams);
   } catch (error) {
     return NextResponse.json(
-      { message: "Failed to fetch teams" },
+      { message: "Failed to fetch teams", error: String(error) },
       { status: 500 },
     );
   }
