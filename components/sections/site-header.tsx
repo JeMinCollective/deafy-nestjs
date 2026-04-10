@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Hand } from "lucide-react";
 import { getBetaApkHref } from "@/lib/config/beta-apk";
 import { primaryNav } from "@/lib/data/navigation";
+import Image from "next/image";
 
 export function SiteHeader() {
   const apkHref = getBetaApkHref();
@@ -13,10 +13,14 @@ export function SiteHeader() {
           href="/"
           className="text-foreground flex items-center gap-2 font-semibold tracking-tight"
         >
-          <span className="bg-primary/15 text-primary flex h-9 w-9 items-center justify-center rounded-lg">
-            <Hand className="h-5 w-5" aria-hidden />
+          <span className="flex h-9 w-15 items-center justify-center rounded-lg">
+            <Image
+              src="/images/deafy.png"
+              alt="Deafy Logo"
+              width={70}
+              height={24}
+            />
           </span>
-          <span className="text-lg">Deafy</span>
         </Link>
 
         <nav
