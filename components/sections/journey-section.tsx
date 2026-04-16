@@ -1,6 +1,11 @@
+"use client";
+
 import dynamic from "next/dynamic";
-import { deafyJourney } from "@/lib/data/journey";
+import useSWR from "swr";
+
+import { fetchJourneys } from "@/lib/data/journey";
 import { SectionLoadingFallback } from "@/components/sections/section-loading-fallback";
+import { TimelineItem } from "@/types/timeline";
 
 const JourneyTimeline = dynamic(
   () =>
@@ -18,6 +23,43 @@ const JourneyTimeline = dynamic(
 );
 
 export function JourneySection() {
+  const {
+    data: journeys = [],
+    isLoading,
+    error,
+  } = useSWR<TimelineItem[]>("journeys", fetchJourneys);
+
+  if (isLoading) {
+    return (
+      <section
+        id="journey"
+        className="bg-background scroll-mt-24 py-16 md:py-24"
+      >
+        <div className="container mx-auto px-4">
+          <SectionLoadingFallback
+            label="Loading journey"
+            className="min-h-[24rem]"
+          />
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section
+        id="journey"
+        className="bg-background scroll-mt-24 py-16 md:py-24"
+      >
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-red-500 font-medium">
+            Failed to load journey data.
+          </p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="journey" className="bg-background scroll-mt-24 py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -34,7 +76,8 @@ export function JourneySection() {
             with us.
           </p>
         </header>
-        <JourneyTimeline items={deafyJourney} />
+
+        <JourneyTimeline items={journeys} />
       </div>
     </section>
   );
