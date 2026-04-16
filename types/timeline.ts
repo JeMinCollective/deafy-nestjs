@@ -5,6 +5,7 @@ export interface TimelineItem {
   image?: string;
   status?: "completed" | "current" | "upcoming";
   category?: string;
+  date_started?: string;
 }
 
 export interface TimelineProps {
